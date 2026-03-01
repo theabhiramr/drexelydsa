@@ -23,6 +23,7 @@ function Navbar() {
       const navbar = document.getElementById("navbar");
       const currentScrollY = window.scrollY;
       const heroThreshold = window.innerHeight * 0.9;
+      const isDesktop = window.innerWidth >= 768;
 
       if (currentScrollY > 0) {
         navbar?.classList.add("bg-primary", "shadow-md");
@@ -32,7 +33,9 @@ function Navbar() {
         navbar?.classList.remove("bg-primary", "shadow-md");
       }
 
-      if (currentScrollY <= heroThreshold) {
+      if (!isDesktop) {
+        setIsHidden(false);
+      } else if (currentScrollY <= heroThreshold) {
         setIsHidden(false);
       } else if (currentScrollY > lastScrollY + 8) {
         setIsHidden(true);
@@ -59,9 +62,9 @@ function Navbar() {
   return (
     <nav
       id="navbar"
-      className={`fixed top-0 left-0 w-full z-50 transform transition-transform duration-300 ${
-        isHidden ? "-translate-y-full" : "translate-y-0"
-      } bg-transparent shadow-none`}
+      className={`fixed top-0 left-0 w-full z-50 bg-transparent shadow-none duration-300 md:transform md:transition-transform ${
+        isHidden ? "md:-translate-y-full" : "md:translate-y-0"
+      }`}
     >
       <div className="relative text-background max-w-7xl mx-auto px-6 py-6 flex items-center justify-between md:px-32">
         <img src={dsaLogo} alt="Drexel YDSA Logo" className="h-16 md:h-32" />
