@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import dsaLogo from "../assets/logo.png";
 
 function NavbarSection({ title }: { title: string }) {
