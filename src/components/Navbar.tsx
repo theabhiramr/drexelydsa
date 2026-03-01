@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dsaLogo from "../assets/logo.png";
 
 function NavbarSection({ title }: { title: string }) {
@@ -13,16 +13,34 @@ function NavbarSection({ title }: { title: string }) {
   );
 }
 function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
       const navbar = document.getElementById("navbar");
-      if (window.scrollY > 0) {
+      const currentScrollY = window.scrollY;
+      const heroThreshold = window.innerHeight * 0.9;
+
+      if (currentScrollY > 0) {
         navbar?.classList.add("bg-primary", "shadow-md");
         navbar?.classList.remove("bg-transparent", "shadow-none");
       } else {
         navbar?.classList.add("bg-transparent", "shadow-none");
         navbar?.classList.remove("bg-primary", "shadow-md");
       }
+
+      if (currentScrollY <= heroThreshold) {
+        setIsHidden(false);
+      } else if (currentScrollY > lastScrollY + 8) {
+        setIsHidden(true);
+      } else if (currentScrollY < lastScrollY - 8) {
+        setIsHidden(false);
+      }
+
+      lastScrollY = currentScrollY;
     };
 
     handleScroll();
@@ -32,14 +50,22 @@ function Navbar() {
     };
   }, []);
 
+  useEffect(() => {
+    if (menuOpen) {
+      setIsHidden(false);
+    }
+  }, [menuOpen]);
+
   return (
     <nav
       id="navbar"
-      className="fixed top-0 left-0 w-full z-50 transition-colors duration-300 bg-transparent shadow-none"
+      className={`fixed top-0 left-0 w-full z-50 transform transition-transform duration-300 ${
+        isHidden ? "-translate-y-full" : "translate-y-0"
+      } bg-transparent shadow-none`}
     >
-      <div className="text-background max-w-7xl mx-auto px-32 py-6 flex items-center justify-between">
-        <img src={dsaLogo} alt="Drexel YDSA Logo" className="h-32" />
-        <div className="space-x-8">
+      <div className="relative text-background max-w-7xl mx-auto px-6 py-6 flex items-center justify-between md:px-32">
+        <img src={dsaLogo} alt="Drexel YDSA Logo" className="h-16 md:h-32" />
+        <div className="hidden items-center space-x-8 md:flex">
           <NavbarSection title="Home" />
           <NavbarSection title="About" />
           <NavbarSection title="Events" />
@@ -49,6 +75,50 @@ function Navbar() {
               Join DSA
             </button>
           </a>
+        </div>
+        <button
+          type="button"
+          aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+          className="relative z-50 md:hidden inline-flex h-12 w-12 items-center justify-center rounded-full border border-background/40 text-background transition-colors duration-300 hover:bg-background/10"
+        >
+          <span className="sr-only">Toggle menu</span>
+          <div className="relative h-6 w-6">
+            {/* Top Bar */}
+            <span
+              className={`absolute left-1/2 block h-0.5 w-6 -translate-x-1/2 bg-current transition-all duration-300 ${
+                menuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-2"
+              }`}
+            />
+            {/* Bottom Bar */}
+            <span
+              className={`absolute left-1/2 block h-0.5 w-6 -translate-x-1/2 bg-current transition-all duration-300 ${
+                menuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "top-4"
+              }`}
+            />
+          </div>
+        </button>
+        <div
+          className={`fixed inset-0 z-40 bg-primary text-background transform transition-transform duration-300 md:hidden ${
+            menuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <div className="flex h-full flex-col items-center justify-center gap-8 px-8 text-center">
+            <NavbarSection title="Home" />
+            <NavbarSection title="About" />
+            <NavbarSection title="Events" />
+            <NavbarSection title="Contact" />
+            <a
+              href="https://act.dsausa.org/donate/membership/"
+              target="_blank"
+              className="w-full"
+            >
+              <button className="w-full uppercase px-6 py-4 bg-background text-content font-black text-xl rounded-full hover:bg-background-secondary transition-colors duration-300">
+                Join DSA
+              </button>
+            </a>
+          </div>
         </div>
       </div>
     </nav>
