@@ -17,11 +17,11 @@ function Navbar() {
     const handleScroll = () => {
       const navbar = document.getElementById("navbar");
       if (window.scrollY > 0) {
-        navbar?.classList.add("shadow-md");
+        navbar?.classList.add("bg-primary", "shadow-md");
         navbar?.classList.remove("bg-transparent", "shadow-none");
       } else {
         navbar?.classList.add("bg-transparent", "shadow-none");
-        navbar?.classList.remove("shadow-md");
+        navbar?.classList.remove("bg-primary", "shadow-md");
       }
     };
 

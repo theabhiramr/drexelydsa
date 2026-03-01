@@ -3,16 +3,20 @@ import heroJpg from "../assets/hero.jpg";
 function Home() {
   return (
     <>
-      <div className="relative min-h-screen">
+      <div className="relative min-h-screen overflow-hidden">
         <img
           src={heroJpg}
           alt="Drexel YDSA Hero"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="relative flex min-h-screen items-center justify-center">
-          <h1 className="text-5xl font-bold text-white bg-primary bg-opacity-75 px-8 py-4 rounded-lg">
-            Welcome to Drexel YDSA
-          </h1>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-black/60" />
+        <div className="absolute inset-0 z-10 flex h-full w-full items-center justify-center text-center">
+          <div className="w-full">
+            <h1 className="w-full uppercase font-black leading-[0.75] tracking-[-0.02em] text-background text-[120px]">
+              <span className="block w-full">Welcome to</span>
+              <span className="block w-full text-primary">Drexel YDSA</span>
+            </h1>
+          </div>
         </div>
       </div>
       <div className="h-screen bg-background-secondary">
