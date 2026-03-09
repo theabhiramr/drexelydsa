@@ -1,0 +1,11 @@
+{
+	"name": "an-proxy",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-03-01",
+	"observability": {
+		"enabled": true,
+	},
+	"vars": {
+		"AN_API_URL": "https://api.actionnetwork.org/api/v2",
+	},
+}
