@@ -1,16 +1,11 @@
 {
   "name": "drexelydsa",
   "private": true,
-  "workspaces": [
-    "apps/web",
-    "apps/workers/an-proxy"
-  ],
   "devDependencies": {
     "wrangler": "^4.71.0"
   },
   "scripts": {
-    "dev:an-proxy": "wrangler dev apps/workers/an-proxy",
-    "build:an-proxy": "wrangler build apps/workers/an-proxy",
-    "deploy:an-proxy": "npm run deploy -w apps/workers/an-proxy"
+    "dev:an-proxy": "cd apps/workers/an-proxy && npm run dev",
+    "deploy:an-proxy": "cd apps/workers/an-proxy && npm run deploy"
   }
 }
