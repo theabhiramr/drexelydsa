@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  web:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,8 +16,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -30,3 +30,21 @@ jobs:
 
       - name: Build
         run: npm run build
+  workers-an-proxy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build an-proxy worker
+        run: npm run build:an-proxy
+      - name: Test an-proxy worker
+        run: npm run test:an-proxy
