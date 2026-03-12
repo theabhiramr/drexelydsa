@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Calendar, dateFnsLocalizer, type View } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale";
@@ -23,23 +23,9 @@ export default function EventsCalendar() {
   const [currentView, setCurrentView] = useState<View>("month");
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const isMobile = useMemo(() => {
-    if (typeof window === "undefined") return false;
-    return window.innerWidth < 768;
-  }, []);
-
-  useEffect(() => {
-    if (isMobile) {
-      setCurrentView("agenda");
-    }
-  }, [isMobile]);
-
   useEffect(() => {
     getEvents()
-      .then((data) => {
-        console.log("Events fetched:", data);
-        setEvents(data);
-      })
+      .then(setEvents)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
@@ -74,18 +60,16 @@ export default function EventsCalendar() {
     );
   }
 
-  const calendarHeight = isMobile ? 400 : 600;
-
   return (
     <div
       style={{
         backgroundColor: "white",
         borderRadius: 8,
-        padding: isMobile ? 8 : 16,
+        padding: 16,
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
       }}
     >
-      <div style={{ height: calendarHeight }}>
+      <div style={{ height: 600 }}>
         <Calendar
           localizer={localizer}
           events={events}
@@ -98,7 +82,6 @@ export default function EventsCalendar() {
           onNavigate={handleNavigate}
           popup
           timeslots={2}
-          step={30}
           defaultView="month"
         />
       </div>
@@ -148,15 +131,17 @@ export default function EventsCalendar() {
             </p>
             {selectedEvent.resource?.location && (
               <p style={{ marginBottom: 8, color: "black" }}>
-                <strong>Location:</strong> {selectedEvent.resource.location}
+                <strong>Location:</strong>{" "}
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: selectedEvent.resource.location,
+                  }}
+                />
               </p>
             )}
-            {selectedEvent.resource?.description && (
-              <div 
-                style={{ marginBottom: 16, color: "#333", fontSize: 14 }}
-                dangerouslySetInnerHTML={{ __html: selectedEvent.resource.description }}
-              />
-            )}
+            <p style={{ marginBottom: 16, color: "black" }}>
+              {selectedEvent.resource?.description}
+            </p>
             {selectedEvent.resource?.url && (
               <a
                 href={selectedEvent.resource.url}

@@ -5,6 +5,7 @@
     "wrangler": "^4.71.0"
   },
   "scripts": {
+    "build": "cd apps/web && npm run build",
     "dev:an-proxy": "cd apps/workers/an-proxy && npm run dev",
     "deploy:an-proxy": "cd apps/workers/an-proxy && npm run deploy"
   }
