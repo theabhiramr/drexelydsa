@@ -25,9 +25,12 @@ interface ANResponse {
   };
 }
 
-const WORKER_URL = import.meta.env.VITE_WORKER_URL;
+const WORKER_URL = import.meta.env.VITE_WORKER_URL || "https://an-proxy.drexelydsa.workers.dev";
 
 export async function fetchFromWorker(endpoint: string, options?: RequestInit) {
+  if (!WORKER_URL) {
+    throw new Error("Worker URL not configured");
+  }
   const url = `${WORKER_URL}${endpoint}`;
   const response = await fetch(url, options);
   if (!response.ok) {

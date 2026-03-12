@@ -172,3 +172,51 @@ h1 {
 .rbc-event-label {
   display: none !important;
 }
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .rbc-calendar {
+    font-size: 12px !important;
+  }
+  
+  .rbc-toolbar {
+    flex-direction: column !important;
+    gap: 4px !important;
+    padding: 4px !important;
+  }
+  
+  .rbc-toolbar-label {
+    font-size: 14px !important;
+    margin: 4px 0 !important;
+  }
+  
+  .rbc-toolbar button {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+  }
+  
+  .rbc-header {
+    padding: 4px !important;
+    font-size: 11px !important;
+  }
+  
+  .rbc-date-cell {
+    padding: 2px !important;
+    font-size: 11px !important;
+  }
+  
+  .rbc-event {
+    font-size: 10px !important;
+    padding: 1px !important;
+  }
+  
+  /* Make agenda view more mobile-friendly */
+  .rbc-agenda-view {
+    font-size: 12px !important;
+  }
+  
+  .rbc-agenda-date-cell,
+  .rbc-agenda-event-cell {
+    padding: 4px !important;
+  }
+}

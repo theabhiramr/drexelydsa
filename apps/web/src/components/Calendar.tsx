@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Calendar, dateFnsLocalizer, type View } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale";
@@ -22,6 +22,17 @@ export default function EventsCalendar() {
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [currentView, setCurrentView] = useState<View>("month");
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  const isMobile = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth < 768;
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      setCurrentView("agenda");
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     getEvents()
@@ -63,16 +74,18 @@ export default function EventsCalendar() {
     );
   }
 
+  const calendarHeight = isMobile ? 400 : 600;
+
   return (
     <div
       style={{
         backgroundColor: "white",
         borderRadius: 8,
-        padding: 16,
+        padding: isMobile ? 8 : 16,
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
       }}
     >
-      <div style={{ height: 600 }}>
+      <div style={{ height: calendarHeight }}>
         <Calendar
           localizer={localizer}
           events={events}
