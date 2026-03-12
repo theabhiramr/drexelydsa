@@ -44,18 +44,29 @@ export async function getEvents(): Promise<Event[]> {
   const data: ANResponse = response;
   const events = data._embedded?.["osdi:events"] || [];
 
-  return events.map((event) => ({
-    id: event.identifiers?.[0] || "",
-    title: event.title,
-    start: new Date(event.start_date),
-    end: event.end_date ? new Date(event.end_date) : new Date(event.start_date),
-    allDay: false,
-    resource: {
-      url: event.browser_url,
-      location: event.location?.venue || "TBD",
-      description: event.description,
-    },
-  }));
+  return events.map((event) => {
+    const start = new Date(event.start_date);
+    let end: Date;
+    if (event.end_date) {
+      end = new Date(event.end_date);
+    } else {
+      // Default to 1.5 hours after start if no end date
+      end = new Date(start.getTime() + 90 * 60 * 1000);
+    }
+
+    return {
+      id: event.identifiers?.[0] || "",
+      title: event.title,
+      start,
+      end,
+      allDay: false,
+      resource: {
+        url: event.browser_url,
+        location: event.location?.venue || "TBD",
+        description: event.description,
+      },
+    };
+  });
 }
 
 // Future-proofing

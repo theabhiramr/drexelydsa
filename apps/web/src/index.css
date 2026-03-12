@@ -10,11 +10,9 @@ body,
   font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -69,4 +67,108 @@ h1 {
   --color-background: #fde0d1;
   --color-background-secondary: #f9b9af;
   --color-content: #2f0607;
+}
+
+/* Calendar text color fix */
+.rbc-calendar {
+  color: black !important;
+}
+
+.rbc-header,
+.rbc-month-view,
+.rbc-time-view,
+.rbc-day-bg,
+.rbc-time-content,
+.rbc-timeslot-group {
+  color: black !important;
+}
+
+.rbc-event {
+  color: white !important;
+}
+
+.rbc-date-cell {
+  color: black !important;
+}
+
+/* DSA color styling */
+.rbc-header {
+  background-color: #fde0d0 !important;
+  border-bottom: 2px solid #ec1f27 !important;
+}
+
+.rbc-today {
+  background-color: #fde0d0 !important;
+}
+
+.rbc-event {
+  background-color: #ec1f27 !important;
+}
+
+.rbc-event:hover {
+  background-color: #c4181f !important;
+}
+
+.rbc-date-cell.rbc-now {
+  color: #ec1f27 !important;
+  font-weight: bold !important;
+}
+
+/* Week and Day view styling */
+.rbc-time-view {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.rbc-time-header {
+  display: flex !important;
+}
+
+.rbc-time-header-content {
+  display: flex !important;
+  flex: 1 !important;
+}
+
+.rbc-time-content {
+  display: flex !important;
+  flex: 1 !important;
+}
+
+.rbc-time-group {
+  display: flex !important;
+}
+
+.rbc-time-group-items {
+  display: flex !important;
+  flex: 1 !important;
+}
+
+.rbc-timeslot-group {
+  display: flex !important;
+  flex: 1 !important;
+}
+
+.rbc-time-slot {
+  display: flex !important;
+}
+
+.rbc-day-slot {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.rbc-day-slot .rbc-time-slot {
+  display: block !important;
+}
+
+.rbc-event.rbc-selected {
+  background-color: #c4181f !important;
+}
+
+.rbc-event-content {
+  display: block !important;
+}
+
+.rbc-event-label {
+  display: none !important;
 }

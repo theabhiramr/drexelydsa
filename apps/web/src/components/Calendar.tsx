@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
-import { Calendar, dateFnsLocalizer, EventInteractionArgs } from "react-big-calendar";
-import type { Event as CalendarEvent } from "react-big-calendar";
+import { useState, useEffect, useCallback } from "react";
+import { Calendar, dateFnsLocalizer, type View } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import "react-big-calendar/lib/addons/popup/styles.css";
 import { getEvents } from "../lib/actionNetwork";
 
 const locales = { "en-US": enUS };
@@ -18,140 +15,162 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-interface CustomEvent extends CalendarEvent {
-  resource?: {
-    url: string;
-    location: string;
-    description?: string;
-  };
-}
-
 export default function EventsCalendar() {
-  const [events, setEvents] = useState<CustomEvent[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedEvent, setSelectedEvent] = useState<CustomEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [currentView, setCurrentView] = useState<View>("month");
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
     getEvents()
-      .then(setEvents)
+      .then((data) => {
+        console.log("Events fetched:", data);
+        setEvents(data);
+      })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
 
-  const eventStyleGetter = () => ({
-    style: {
-      backgroundColor: "#ec1f27",
-      borderRadius: "4px",
-      opacity: 0.9,
-      color: "white",
-      border: "none",
-      display: "block",
-      cursor: "pointer",
-    },
-  });
-
-  const handleSelectEvent = (event: CustomEvent) => {
+  const handleSelectEvent = useCallback((event: any) => {
     setSelectedEvent(event);
-  };
+  }, []);
 
-  const EventComponent = ({ event }: { event: CustomEvent }) => (
-    <span className="text-xs">
-      <strong>{event.title}</strong>
-    </span>
-  );
+  const handleView = useCallback((view: View) => {
+    setCurrentView(view);
+  }, []);
+
+  const handleNavigate = useCallback((date: Date) => {
+    setCurrentDate(date);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setSelectedEvent(null);
+  }, []);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-xl text-content">Loading events...</div>
-      </div>
+      <div style={{ padding: 20, textAlign: "center" }}>Loading events...</div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-xl text-red-600">Error: {error}</div>
+      <div style={{ padding: 20, textAlign: "center", color: "red" }}>
+        Error: {error}
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4">
-      {/* Calendar */}
-      <div className="h-[600px]">
+    <div
+      style={{
+        backgroundColor: "white",
+        borderRadius: 8,
+        padding: 16,
+        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+      }}
+    >
+      <div style={{ height: 600 }}>
         <Calendar
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
-          titleAccessor="title"
-          eventPropGetter={eventStyleGetter}
-          components={{
-            event: EventComponent,
-          }}
-          views={["month", "week", "day", "agenda"]}
-          defaultView="month"
-          popup
-          selectable
           onSelectEvent={handleSelectEvent}
-          className="rbc-calendar"
+          view={currentView}
+          onView={handleView}
+          date={currentDate}
+          onNavigate={handleNavigate}
+          popup
+          timeslots={2}
+          step={30}
+          defaultView="month"
         />
       </div>
 
-      {/* Event Details Modal */}
       {selectedEvent && (
         <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={() => setSelectedEvent(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+          onClick={closeModal}
         >
           <div
-            className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl"
+            style={{
+              backgroundColor: "white",
+              padding: 24,
+              borderRadius: 8,
+              maxWidth: 400,
+              width: "90%",
+              color: "black",
+            }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-2xl font-bold text-content mb-2">
+            <h2
+              style={{
+                marginBottom: 8,
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "black",
+              }}
+            >
               {selectedEvent.title}
             </h2>
-            <div className="text-gray-600 mb-4">
-              <p className="font-semibold">
-                {format(selectedEvent.start, "EEEE, MMMM d, yyyy")}
-              </p>
-              <p>
-                {format(selectedEvent.start, "h:mm a")} -{" "}
-                {format(selectedEvent.end, "h:mm a")}
-              </p>
-            </div>
+            <p style={{ color: "#333", marginBottom: 8 }}>
+              {selectedEvent.start
+                ? format(selectedEvent.start, "EEEE, MMMM d, yyyy")
+                : "TBD"}
+            </p>
+            <p style={{ color: "#333", marginBottom: 16 }}>
+              {selectedEvent.start && format(selectedEvent.start, "h:mm a")}
+              {selectedEvent.end && ` - ${format(selectedEvent.end, "h:mm a")}`}
+            </p>
             {selectedEvent.resource?.location && (
-              <div className="mb-4">
-                <p className="font-semibold text-gray-700">Location:</p>
-                <p className="text-gray-600">{selectedEvent.resource.location}</p>
-              </div>
+              <p style={{ marginBottom: 8, color: "black" }}>
+                <strong>Location:</strong> {selectedEvent.resource.location}
+              </p>
             )}
             {selectedEvent.resource?.description && (
-              <div className="mb-4">
-                <p className="font-semibold text-gray-700">Description:</p>
-                <p
-                  className="text-gray-600 text-sm"
-                  dangerouslySetInnerHTML={{
-                    __html: selectedEvent.resource.description,
-                  }}
-                />
-              </div>
+              <div 
+                style={{ marginBottom: 16, color: "#333", fontSize: 14 }}
+                dangerouslySetInnerHTML={{ __html: selectedEvent.resource.description }}
+              />
             )}
             {selectedEvent.resource?.url && (
               <a
                 href={selectedEvent.resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block bg-primary text-white px-4 py-2 rounded font-bold hover:bg-red-700 transition-colors"
+                style={{
+                  display: "inline-block",
+                  backgroundColor: "#ec1f27",
+                  color: "white",
+                  padding: "8px 16px",
+                  borderRadius: 4,
+                  textDecoration: "none",
+                  fontWeight: "bold",
+                }}
               >
                 RSVP on Action Network
               </a>
             )}
             <button
-              onClick={() => setSelectedEvent(null)}
-              className="ml-4 text-gray-500 hover:text-gray-700"
+              onClick={closeModal}
+              style={{
+                marginLeft: 16,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: "#666",
+              }}
             >
               Close
             </button>
