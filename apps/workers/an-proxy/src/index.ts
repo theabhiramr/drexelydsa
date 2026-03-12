@@ -10,17 +10,20 @@
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		const AN_API_URL = env.AN_API_URL;
+		const AN_API_URL = env.AN_API_URL || 'https://actionnetwork.org/api/v2';
 		const AN_API_KEY = env.AN_API_KEY;
 
-		// Cors handling
+		// CORS headers (applied to all responses)
+		const corsHeaders = {
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+		};
+
+		// Handle CORS preflight
 		if (request.method === 'OPTIONS') {
 			return new Response(null, {
-				headers: {
-					'Access-Control-Allow-Origin': '*',
-					'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-					'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-				},
+				headers: corsHeaders,
 			});
 		}
 
@@ -42,11 +45,12 @@ export default {
 		});
 
 		// Return the response from the Action Network API, adding CORS headers
+		// Don't spread apiResponse.headers - it may contain CORS headers causing duplicates
 		return new Response(apiResponse.body, {
 			status: apiResponse.status,
 			headers: {
-				...Object.fromEntries(apiResponse.headers),
-				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/json',
+				...corsHeaders,
 			},
 		});
 	},

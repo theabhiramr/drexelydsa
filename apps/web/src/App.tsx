@@ -1,5 +1,6 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
+import Events from "./pages/Events";
 import Home from "./pages/Home";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         {/* Added flex, flex-col, and a larger gap */}
         <Navbar />
         <Home />
+        <Events />
       </div>
     </>
   );
