@@ -9,7 +9,7 @@ function App() {
       {/* Background stays fixed and behind everything */}
       <div className="fixed top-0 left-0 w-full h-full bg-background-secondary -z-10" />
 
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-12">
         {" "}
         {/* Added flex, flex-col, and a larger gap */}
         <Navbar />
