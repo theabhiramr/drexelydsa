@@ -139,9 +139,12 @@ export default function EventsCalendar() {
                 />
               </p>
             )}
-            <p style={{ marginBottom: 16, color: "black" }}>
-              {selectedEvent.resource?.description}
-            </p>
+            {selectedEvent.resource?.description && (
+              <div
+                style={{ marginBottom: 16, color: "#333", fontSize: 14 }}
+                dangerouslySetInnerHTML={{ __html: selectedEvent.resource.description }}
+              />
+            )}
             {selectedEvent.resource?.url && (
               <a
                 href={selectedEvent.resource.url}
