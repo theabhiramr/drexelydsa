@@ -4,7 +4,7 @@ import About from "./About";
 function Home() {
   return (
     <>
-      <div className="relative flex items-center justify-center h-[60dvh] w-full overflow-hidden bg-black pt-16 pb-8 md:pt-0 md:h-screen">
+      <div className="relative flex items-center justify-center h-[60dvh] w-full overflow-hidden bg-black pt-12 pb-6 md:pt-0 md:h-screen">
         {/* Layer 1: The Image */}
         <img
           src={heroJpg}
@@ -16,16 +16,16 @@ function Home() {
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/70 via-black/20 to-black/80" />
 
         {/* Layer 3: The Content (Z-20 ensures it's above the image and gradient) */}
-        <div className="relative z-20 flex h-full flex-col items-center justify-center px-6 text-center">
+        <div className="relative z-20 flex h-full flex-col items-center justify-center px-2 text-center max-w-full overflow-hidden">
           {/* The Text Block */}
-          <h1 className="flex flex-col items-center font-black uppercase tracking-tighter leading-[0.8] w-full max-w-7xl mb-12">
-            <span className="text-background text-[18vw] md:text-[11rem]">
+          <h1 className="flex flex-col items-center font-black uppercase tracking-tighter leading-[0.85] w-full max-w-7xl mb-8 md:mb-12">
+            <span className="text-background text-[13vw] md:text-[11rem]">
               Welcome
             </span>
-            <span className="text-background text-[15vw] md:text-[9rem]">
+            <span className="text-background text-[11vw] md:text-[9rem]">
               To
             </span>
-            <span className="text-primary text-[14vw] md:text-[10rem] whitespace-nowrap">
+            <span className="text-primary text-[10vw] md:text-[10rem] whitespace-nowrap">
               Drexel YDSA
             </span>
           </h1>
@@ -37,7 +37,7 @@ function Home() {
             rel="noopener noreferrer"
             className="group relative"
           >
-            <button className="px-10 py-5 bg-primary text-background font-black text-xl md:text-3xl rounded-full uppercase transition-all duration-300 transform group-hover:scale-105 group-hover:bg-red-700 active:scale-95 shadow-xl">
+            <button className="px-6 py-3 bg-primary text-background font-black text-lg md:text-3xl rounded-full uppercase transition-all duration-300 transform group-hover:scale-105 group-hover:bg-red-700 active:scale-95 shadow-xl">
               Get Involved
             </button>
           </a>
