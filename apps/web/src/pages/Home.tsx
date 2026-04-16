@@ -3,7 +3,7 @@ import heroJpg from "../assets/hero.jpg";
 function Home() {
   return (
     <>
-      <div className="relative h-screen w-full overflow-hidden bg-black">
+      <div className="relative flex items-center justify-center h-[60dvh] w-full overflow-hidden bg-black pt-16 pb-8 md:pt-0 md:h-screen">
         {/* Layer 1: The Image */}
         <img
           src={heroJpg}
@@ -42,7 +42,7 @@ function Home() {
           </a>
         </div>
       </div>
-      <div id="about" className="h-screen bg-background-secondary">
+      <div id="about" className="min-h-screen bg-background-secondary">
         <div className="max-w-4xl mx-auto px-8 py-16">
           <h1 className="text-3xl font-bold text-content mb-4">About Us</h1>
           <p className="text-3xl font-semibold text-primary mb-2">
